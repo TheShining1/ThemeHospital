@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="34">
+  <Forms>
+    <THevents Class="TCEForm" Encoding="Ascii85">rBS[Z,b_HOq+#/=cPP+R89iq)GG)[[8xG+cj-^m8g0p/K2vMX;ofG7)I(^km/bC:AmBctfymaWq.}l@Ie*!?tmdwW(Jc(kQZHge7.3Fz3Po{sg?7)bxC@i^,ugpvI+89a.KgEhN?80DRY*NS4pC%a:+qi8bD,pxIF6c(5ROdUqWA6vFKT}n0pZM1U.X[Sdw@+(@2Nt;uDTzlMHREpsm1f$,Vug!)W52F:8%i[OM7lWrnA@tjgT^};9^l]n^J7zpoim5q1!boNc^TANuK@tLhAx2Iu3[D:R?9F(FfkJE4zA.=hiEcb#G?p%BQ3SzJe5NUY2Imimel;zZf?65pdZAz)b(7avZ%SBG}=lVdk03qQljO#+?G1H%:vov-N2f?OohU-ACnPkQ#!ssXfk5q9848cjR{GU!fK{Eb2}[2IWsFXF01HdOkl_M,f[M5wV_x}^P)mwyFKpT!nU7);HK$CpWPpeZ^5[C_J3e$Xy;1]v%d</THevents>
+  </Forms>
+  <CheatEntries>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"base"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>4 Bytes</VariableType>
+      <Address>0x01D3A1A0</Address>
+      <Offsets>
+        <Offset>0</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>208</ID>
+      <Description>"VIPs"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>215</ID>
+          <Description>"vip-name"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>String</VariableType>
+          <Length>26</Length>
+          <Unicode>0</Unicode>
+          <CodePage>0</CodePage>
+          <ZeroTerminate>0</ZeroTerminate>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>3F7B10</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>211</ID>
+          <Description>"vip-next-name"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>509BAE</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>209</ID>
+          <Description>"vip-current-name"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>4FCBAC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>212</ID>
+          <Description>"vip-score"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>4FCBAE</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>213</ID>
+          <Description>"vip-days"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>4FCBB2</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>313</ID>
+          <Description>"vip-days-limit"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>2E9DA8</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+  <LuaScript>form_show(THevents)
+getAutoAttachList().add("DOSBox.exe")
+
+function CloseClick()
+  closeCE()
+  return caFree
+end
+
+THevents.OnClose = CloseClick
+
+--Globals
+CONFIG = {}
+QUEUE = {}
+ACTIVE_QUEUE = {}
+ADDRESS_LIST = {}
+TIMEOUTS_TABLE = {}
+--/Globals
+
+--Helpers
+function split(input, sep)
+  if sep == nil then
+      sep = "%s"
+  end
+  local t={}
+  for str in string.gmatch(input, "([^"..sep.."]+)") do
+    table.insert(t, str)
+  end
+  return t
+end
+--/Helpers
+
+--Config class
+THConfig = {
+  PATH = "FULL_PATH_TO_FILE/TH_events.config",
+  QUEUE_FILE = "TH_events_queue.txt",
+  ACTIVE_QUEUE_FILE = "TH_events_active_queue.txt",
+  MAX_2SBYTES = 32766
+}
+
+function THConfig:read()
+  for line in io.lines(self.PATH)
+  do
+    arr = split(line, "=")
+    self[arr[1]] = arr[2]
+  end
+end
+
+function THConfig:print()
+  for k,v in pairs(self)
+  do
+    print(string.format("key: %s\tvalue: %s", k,v))
+  end
+end
+
+function THConfig:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/Config class
+
+--Init stuff
+function initAddressList()
+  ADDRESS_LIST = getAddressList()
+end
+
+function lockAddresses()
+  -- lock default from spawn VIPs
+  vipDaysMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-days-limit")
+  writeSmallInteger(vipDaysMem.CurrentAddress, CONFIG.MAX_2SBYTES)
+end
+
+function init(timer)
+  lockAddresses()
+  timer.Destroy()
+end
+--Init stuff
+
+--THQueue class
+THQueue = {
+  PATH = "",
+  lines = {}
+}
+
+--get reads and stores lines from queue file, QUEUE_FILE in config
+function THQueue:get()
+  lines = {}
+  for line in io.lines(self.PATH)
+  do
+    if line == "" then end
+    table.insert(lines, line)
+  end
+
+  self.lines = lines
+end
+
+function THQueue:dequeue()
+  line = table.remove(self.lines, 1)
+
+  fp = io.open(self.PATH, "w+" )
+  fp:write(string.format("%s", table.concat(self.lines, "\n")))
+  fp:close()
+
+  return line
+end
+
+function THQueue:enqueue(commandLine)
+  table.insert(self.lines, commandLine)
+
+  fp = io.open(self.PATH, "a")
+  fp:write(string.format("\n%s", commandLine))
+  fp:close()
+end
+
+function THQueue:display()
+  str = string.format("%s", table.concat(self.lines, "\n"))
+  THevents.queueEvents.Lines.Text = str
+end
+
+function THQueue:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THQueue class
+
+--THActiveQueue class
+THActiveQueue = {
+  PATH = "",
+  lines = {}
+}
+
+--get reads and stores lines from active queue file, ACTIVE_QUEUE_FILE in config
+function THActiveQueue:get()
+  lines = {}
+  for line in io.lines(self.PATH)
+  do
+    if line and line ~= "" then
+      command = THCommand:new()
+      command:parse(line)
+
+      lines[command.ev] = line
+    end
+  end
+
+  self.lines = lines
+end
+
+function THActiveQueue:dequeue()
+  line = table.remove(self.lines, 1)
+
+  fp = io.open(self.PATH, "w+" )
+  fp:write(string.format("%s", table.concat(self.lines, "\n")))
+  fp:close()
+
+  return line
+end
+
+function THActiveQueue:enqueue(commandLine)
+  table.insert(self.lines, commandLine)
+
+  fp = io.open(self.PATH, "a")
+  fp:write(string.format("%s\n", commandLine))
+  fp:close()
+end
+
+function THActiveQueue:remove(event)
+  self.lines[event] = nil
+
+  fp = io.open(self.PATH, "w+" )
+  fp:write(string.format("%s", table.concat(self.lines, "\n")))
+  fp:close()
+
+  return line
+end
+
+function THActiveQueue:display()
+  lines = {}
+
+  for k,v in pairs(self.lines) do
+    if v then
+      table.insert(lines, v)
+    end
+  end
+
+  str = string.format("%s", table.concat(lines, "\n"))
+  THevents.activeEvents.Lines.Text = str
+end
+
+function THActiveQueue:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THActiveQueue class
+
+--THVip class
+THVip = {}
+
+function THVip:unactivate(timer)
+  ACTIVE_QUEUE:remove("VIP")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THVip:run(arg, name)
+  nameIdx = 10
+
+  nameMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-name")
+  writeString(nameMem.CurrentAddress, name)
+  writeBytes(nameMem.CurrentAddress + #name, 0)
+
+  maxScore = 14
+  minScore = 0
+
+  score = tonumber(arg)
+  --converting score
+  gameScore = maxScore - (score*3)
+  if gameScore &lt; 0 then gameScore = 0 end
+  --converting score
+
+  vipDaysMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-days")
+  writeSmallInteger(vipDaysMem.CurrentAddress, CONFIG.MAX_2SBYTES)
+
+  vipNextNameMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-next-name")
+  writeBytes(vipNextNameMem.CurrentAddress, nameIdx)
+  vipNextNameMem.Active = true
+
+  vipCurNameMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-current-name")
+  writeSmallInteger(vipCurNameMem.CurrentAddress, nameIdx)
+  vipCurNameMem.Active = true
+
+  local timer = createTimer()
+  timer.Interval = 10 * 1000
+  timer.OnTimer = function(timer)
+    vipNextNameMem.Active = false
+    vipCurNameMem.Active = false
+    timer.Destroy()
+  end
+
+  scoreMem = ADDRESS_LIST.getMemoryRecordByDescription("vip-score")
+  writeBytes(scoreMem.CurrentAddress, gameScore)
+  scoreMem.Active = true
+
+  local scoreTimer = createTimer()
+  scoreTimer.Interval = 10 * 60 * 1000
+  scoreTimer.OnTimer = function(timer)
+    scoreMem.Active = false
+    vipArriveTimeMem.ACtive = false
+  end
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+end
+
+function THVip:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THVip class
+
+--THCommand class
+THCommand = {
+  raw = "",
+  ev = "",
+  arg = "",
+  by = "",
+  exec = ""
+}
+
+THCommandsTable = {
+  ["VIP"] = THVip
+}
+
+function THCommand:parse(line)
+  lineByKeys = split(line, ",")
+
+  for k, v in pairs(lineByKeys)
+  do
+     arr = split(v, ":")
+     self[arr[1]] = arr[2]
+  end
+
+  self.exec = THCommandsTable[self.ev]:new({
+    ["unactivateTimeout"] = TIMEOUTS_TABLE[self.ev]
+  })
+  self.raw = line
+end
+
+function THCommand:isActive(activeQueue)
+  return activeQueue.lines[self.ev]
+end
+
+function THCommand:execute()
+  self.exec:run(self.arg, self.by)
+end
+
+function THCommand:print()
+  for k,v in pairs(self)
+  do
+    print(string.format("key: %s\tvalue: %s", k,v))
+  end
+end
+
+function THCommand:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THCommand class
+
+function loop()
+  QUEUE:get()
+  QUEUE:display()
+  ACTIVE_QUEUE:get()
+  ACTIVE_QUEUE:display()
+
+  commandLine = QUEUE:dequeue()
+  QUEUE:display()
+  if not commandLine or commandLine == "" then return end
+  sleep(1000)
+
+  command = THCommand:new()
+  command:parse(commandLine)
+
+  active = command:isActive(ACTIVE_QUEUE)
+  if not active then
+    ACTIVE_QUEUE:enqueue(commandLine)
+    command:execute()
+  else
+    QUEUE:enqueue(commandLine)
+  end
+
+  QUEUE:get()
+  QUEUE:display()
+
+  ACTIVE_QUEUE:get()
+  ACTIVE_QUEUE:display()
+end
+
+initTimer = createTimer(getMainForm(), false)
+initTimer.Interval = 5 * 1000
+initTimer.OnTimer = init
+
+loopTimer = createTimer(getMainForm(), false)
+loopTimer.Interval = 10 * 1000
+loopTimer.OnTimer = loop
+
+function setTimeoutsTable(path)
+  tempTable = {}
+
+  for line in io.lines(path)
+  do
+    arr = split(line, ":")
+    tempTable[arr[1]] = tonumber(arr[2])
+  end
+
+  return tempTable
+end
+
+function start()
+  CONFIG = THConfig:new()
+  CONFIG:read()
+
+  TIMEOUTS_TABLE = setTimeoutsTable(CONFIG.TIMEOUTS_CONFIG)
+
+  QUEUE = THQueue:new({
+    PATH = CONFIG.QUEUE_FILE
+  })
+
+  ACTIVE_QUEUE = THActiveQueue:new({
+    PATH = CONFIG.ACTIVE_QUEUE_FILE
+  })
+
+  initTimer.Enabled = true
+  loopTimer.Enabled = true
+end
+
+start()
+initAddressList()
+</LuaScript>
+</CheatTable>
