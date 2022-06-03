@@ -7,6 +7,8 @@
     <CheatEntry>
       <ID>1</ID>
       <Description>"base"</Description>
+      <LastState Value="F0001060" RealAddress="0A3B1020"/>
+      <ShowAsHex>1</ShowAsHex>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>4 Bytes</VariableType>
       <Address>0x01D3A1A0</Address>
@@ -23,6 +25,7 @@
         <CheatEntry>
           <ID>215</ID>
           <Description>"vip-name"</Description>
+          <LastState RealAddress="0A7A8B30"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>String</VariableType>
           <Length>26</Length>
@@ -37,6 +40,7 @@
         <CheatEntry>
           <ID>211</ID>
           <Description>"vip-next-name"</Description>
+          <LastState Value="0" RealAddress="0A8BABCE"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -47,6 +51,7 @@
         <CheatEntry>
           <ID>209</ID>
           <Description>"vip-current-name"</Description>
+          <LastState Value="0" RealAddress="0A8ADBCC"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -57,6 +62,7 @@
         <CheatEntry>
           <ID>212</ID>
           <Description>"vip-score"</Description>
+          <LastState Value="0" RealAddress="0A8ADBCE"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -67,6 +73,7 @@
         <CheatEntry>
           <ID>213</ID>
           <Description>"vip-days"</Description>
+          <LastState Value="75" RealAddress="0A8ADBD2"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -77,12 +84,90 @@
         <CheatEntry>
           <ID>313</ID>
           <Description>"vip-days-limit"</Description>
+          <LastState Value="150" RealAddress="0A69ADC8"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
           <Address>0x01D3A1A0</Address>
           <Offsets>
             <Offset>2E9DA8</Offset>
           </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>315</ID>
+      <Description>"Quake"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>141</ID>
+          <Description>"quake-severity"</Description>
+          <LastState Value="4" RealAddress="0A6C238B"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>311367+4</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>99</Key>
+              </Keys>
+              <Value>3</Value>
+              <Description>Set quake severity to 3</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>139</ID>
+          <Description>"quake-clock"</Description>
+          <LastState Value="65372" RealAddress="0A6C2387"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>311367</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>99</Key>
+              </Keys>
+              <Value>0</Value>
+              <Description>Start quake</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>140</ID>
+          <Description>"quake-allowed"</Description>
+          <LastState Value="1" RealAddress="0A6C238C"/>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>311367+5</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>99</Key>
+              </Keys>
+              <Value>1</Value>
+              <Description>Allow quake</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
@@ -287,6 +372,40 @@ function THActiveQueue:new(t)
 end
 --/THActiveQueue class
 
+--THQuake class
+THQuake = {}
+
+function THQuake:unactivate(timer)
+  ACTIVE_QUEUE:remove("quake")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THQuake:run(severity)
+  severityMem = ADDRESS_LIST.getMemoryRecordByDescription("quake-severity")
+  writeBytes(severityMem.CurrentAddress, severity)
+
+  clockMem = ADDRESS_LIST.getMemoryRecordByDescription("quake-clock")
+  writeInteger(clockMem.CurrentAddress, 0)
+
+  allowedMem = ADDRESS_LIST.getMemoryRecordByDescription("quake-allowed")
+  writeBytes(allowedMem.CurrentAddress, 1)
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+end
+
+function THQuake:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THQuake class
+
 --THVip class
 THVip = {}
 
@@ -367,6 +486,7 @@ THCommand = {
 }
 
 THCommandsTable = {
+  ["quake"] = THQuake,
   ["VIP"] = THVip
 }
 
