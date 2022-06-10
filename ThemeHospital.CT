@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<CheatTable CheatEngineTableVersion="34">
+<CheatTable CheatEngineTableVersion="42">
   <Forms>
-    <THevents Class="TCEForm" Encoding="Ascii85">rBS[Z,b_HOq+#/=cPP+R89iq)GG)[[8xG+cj-^m8g0p/K2vMX;ofG7)I(^km/bC:AmBctfymaWq.}l@Ie*!?tmdwW(Jc(kQZHge7.3Fz3Po{sg?7)bxC@i^,ugpvI+89a.KgEhN?80DRY*NS4pC%a:+qi8bD,pxIF6c(5ROdUqWA6vFKT}n0pZM1U.X[Sdw@+(@2Nt;uDTzlMHREpsm1f$,Vug!)W52F:8%i[OM7lWrnA@tjgT^};9^l]n^J7zpoim5q1!boNc^TANuK@tLhAx2Iu3[D:R?9F(FfkJE4zA.=hiEcb#G?p%BQ3SzJe5NUY2Imimel;zZf?65pdZAz)b(7avZ%SBG}=lVdk03qQljO#+?G1H%:vov-N2f?OohU-ACnPkQ#!ssXfk5q9848cjR{GU!fK{Eb2}[2IWsFXF01HdOkl_M,f[M5wV_x}^P)mwyFKpT!nU7);HK$CpWPpeZ^5[C_J3e$Xy;1]v%d</THevents>
+    <THevents Class="TCEForm" Encoding="Ascii85">rINpH,b_HuDJd3Z+(PZbKt;OqItWIG=2c-}0o2(B*FfMQk/TWfKXj.bio8^aK183UOJ1Oo7$:CA4w:L_;bvi_ANbd1ELluPJP9XLr3*^a.Ukt+9Ywe%:ZodeP.LY^f0(b}t?Dd?ZsdxDb8GVuwj?;Qo,JVb9L!X.l=3@}4CsfstiP{Fo}ifhPN.IFkA{k]@QWq$pshJi@BW-v-FX:c@@/=z:ecXrH7!31qifVv/IKMXqu=wUu[pd@EL0y-l8-oPCCB436-vi*h07+H)42S_Dt*eqRB]flZyJX]v/z(2kKlKU!1iAVoLbxrsCpg9;KhlbM!,F!=L5fL7{hrn3eYhU=}gCzi?R[)UdEH.VE6MJ)yZ6@jH()HZL3Qt)Dh;6C;.E[Fsg.5RB)U2y#[7eK1btowS!#J6X*xPZyMJ0DUu}tK{:efo62)Cam$GL3)z(DM(o%*gw=#vpSoTG[jA2MZL]]gj_nu^Znr+0SZ,wv?8y,t=[r0#7ue;#oLL],@=v*q?SUs1@1s:wx9t3VcJ;b</THevents>
   </Forms>
   <CheatEntries>
     <CheatEntry>
       <ID>1</ID>
       <Description>"base"</Description>
-      <LastState Value="F0001060" RealAddress="0A3B1020"/>
       <ShowAsHex>1</ShowAsHex>
       <ShowAsSigned>0</ShowAsSigned>
       <VariableType>4 Bytes</VariableType>
@@ -25,7 +24,6 @@
         <CheatEntry>
           <ID>215</ID>
           <Description>"vip-name"</Description>
-          <LastState RealAddress="0A7A8B30"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>String</VariableType>
           <Length>26</Length>
@@ -40,7 +38,6 @@
         <CheatEntry>
           <ID>211</ID>
           <Description>"vip-next-name"</Description>
-          <LastState Value="0" RealAddress="0A8BABCE"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -51,7 +48,6 @@
         <CheatEntry>
           <ID>209</ID>
           <Description>"vip-current-name"</Description>
-          <LastState Value="0" RealAddress="0A8ADBCC"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -62,7 +58,6 @@
         <CheatEntry>
           <ID>212</ID>
           <Description>"vip-score"</Description>
-          <LastState Value="0" RealAddress="0A8ADBCE"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -73,7 +68,6 @@
         <CheatEntry>
           <ID>213</ID>
           <Description>"vip-days"</Description>
-          <LastState Value="75" RealAddress="0A8ADBD2"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -84,7 +78,6 @@
         <CheatEntry>
           <ID>313</ID>
           <Description>"vip-days-limit"</Description>
-          <LastState Value="150" RealAddress="0A69ADC8"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>2 Bytes</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -103,7 +96,6 @@
         <CheatEntry>
           <ID>141</ID>
           <Description>"quake-severity"</Description>
-          <LastState Value="4" RealAddress="0A6C238B"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -126,7 +118,6 @@
         <CheatEntry>
           <ID>139</ID>
           <Description>"quake-clock"</Description>
-          <LastState Value="65372" RealAddress="0A6C2387"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>4 Bytes</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -149,7 +140,6 @@
         <CheatEntry>
           <ID>140</ID>
           <Description>"quake-allowed"</Description>
-          <LastState Value="1" RealAddress="0A6C238C"/>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
@@ -165,6 +155,124 @@
               </Keys>
               <Value>1</Value>
               <Description>Allow quake</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>316</ID>
+      <Description>"Emergency"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>158</ID>
+          <Description>"emergency-award"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D+4</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>1000</Value>
+              <Description>Emergency award = 1000</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>145</ID>
+          <Description>"emergency-clock"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>0</Value>
+              <Description>Start emergency</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>163</ID>
+          <Description>"emergency-disease"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D+7</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Increase Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>1</Value>
+              <Description>Emergency desiase = 9</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>162</ID>
+          <Description>"emergency-amount"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D+8</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>5</Value>
+              <Description>Emergency patients count = 5</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>159</ID>
+          <Description>"emergency-allowed"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D+6</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>1</Value>
+              <Description>Allow emergency</Description>
               <ID>0</ID>
             </Hotkey>
           </Hotkeys>
@@ -189,6 +297,7 @@ QUEUE = {}
 ACTIVE_QUEUE = {}
 ADDRESS_LIST = {}
 TIMEOUTS_TABLE = {}
+EMERGENCIES_TABLE = {}
 --/Globals
 
 --Helpers
@@ -209,6 +318,7 @@ THConfig = {
   PATH = "FULL_PATH_TO_FILE/TH_events.config",
   QUEUE_FILE = "TH_events_queue.txt",
   ACTIVE_QUEUE_FILE = "TH_events_active_queue.txt",
+  EMERGENCIES_CONFIG = "TH_emergencies.config",
   MAX_2SBYTES = 32766
 }
 
@@ -372,6 +482,46 @@ function THActiveQueue:new(t)
 end
 --/THActiveQueue class
 
+--THEmergency class
+THEmergency = {}
+
+function THEmergency:unactivate(timer)
+  ACTIVE_QUEUE:remove("emergency")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THEmergency:run(disease)
+  diseaseMem = ADDRESS_LIST.getMemoryRecordByDescription("emergency-disease")
+  writeBytes(diseaseMem.CurrentAddress, disease)
+
+  awardMem = ADDRESS_LIST.getMemoryRecordByDescription("emergency-award")
+  writeSmallInteger(awardMem.CurrentAddress, EMERGENCIES_TABLE[disease].award)
+
+  amountMem = ADDRESS_LIST.getMemoryRecordByDescription("emergency-amount")
+  writeBytes(amountMem.CurrentAddress, EMERGENCIES_TABLE[disease].amount)
+
+  clockMem = ADDRESS_LIST.getMemoryRecordByDescription("emergency-clock")
+  writeInteger(clockMem.CurrentAddress, 0)
+
+  allowedMem = ADDRESS_LIST.getMemoryRecordByDescription("emergency-allowed")
+  writeBytes(allowedMem.CurrentAddress, 1)
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+end
+
+function THEmergency:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THEmergency class
+
 --THQuake class
 THQuake = {}
 
@@ -486,6 +636,7 @@ THCommand = {
 }
 
 THCommandsTable = {
+  ["emergency"] = THEmergency,
   ["quake"] = THQuake,
   ["VIP"] = THVip
 }
@@ -577,10 +728,30 @@ function setTimeoutsTable(path)
   return tempTable
 end
 
+function setEmergenciesTable(path)
+  tempTable = {}
+
+  for line in io.lines(path)
+  do
+    arr = split(line, ",")
+    key = split(arr[1], ":")
+    award = split(arr[2], ":")
+    amount = split(arr[3], ":")
+
+    tempTable[key[2]] = {
+      [award[1]] = award[2],
+      [amount[1]] = amount[2]
+    }
+  end
+
+  return tempTable
+end
+
 function start()
   CONFIG = THConfig:new()
   CONFIG:read()
 
+  EMERGENCIES_TABLE = setEmergenciesTable(CONFIG.EMERGENCIES_CONFIG)
   TIMEOUTS_TABLE = setTimeoutsTable(CONFIG.TIMEOUTS_CONFIG)
 
   QUEUE = THQueue:new({
