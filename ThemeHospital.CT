@@ -168,6 +168,28 @@
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
         <CheatEntry>
+          <ID>145</ID>
+          <Description>"emergency-clock"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>31135D</Offset>
+          </Offsets>
+          <Hotkeys>
+            <Hotkey>
+              <Action>Set Value</Action>
+              <Keys>
+                <Key>17</Key>
+                <Key>97</Key>
+              </Keys>
+              <Value>0</Value>
+              <Description>Start emergency</Description>
+              <ID>0</ID>
+            </Hotkey>
+          </Hotkeys>
+        </CheatEntry>
+        <CheatEntry>
           <ID>158</ID>
           <Description>"emergency-award"</Description>
           <ShowAsSigned>0</ShowAsSigned>
@@ -190,13 +212,13 @@
           </Hotkeys>
         </CheatEntry>
         <CheatEntry>
-          <ID>145</ID>
-          <Description>"emergency-clock"</Description>
+          <ID>159</ID>
+          <Description>"emergency-allowed"</Description>
           <ShowAsSigned>0</ShowAsSigned>
-          <VariableType>4 Bytes</VariableType>
+          <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
           <Offsets>
-            <Offset>31135D</Offset>
+            <Offset>31135D+6</Offset>
           </Offsets>
           <Hotkeys>
             <Hotkey>
@@ -205,8 +227,8 @@
                 <Key>17</Key>
                 <Key>97</Key>
               </Keys>
-              <Value>0</Value>
-              <Description>Start emergency</Description>
+              <Value>1</Value>
+              <Description>Allow emergency</Description>
               <ID>0</ID>
             </Hotkey>
           </Hotkeys>
@@ -255,27 +277,43 @@
             </Hotkey>
           </Hotkeys>
         </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>317</ID>
+      <Description>"Disaster"</Description>
+      <LastState Value="" RealAddress="00000000"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
         <CheatEntry>
-          <ID>159</ID>
-          <Description>"emergency-allowed"</Description>
+          <ID>218</ID>
+          <Description>"disaster-days"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>4FCBC2</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>314</ID>
+          <Description>"disaster-days-limit"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>0x01D3A1A0</Address>
+          <Offsets>
+            <Offset>2E9DAC</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>320</ID>
+          <Description>"disaster-type"</Description>
           <ShowAsSigned>0</ShowAsSigned>
           <VariableType>Byte</VariableType>
           <Address>0x01D3A1A0</Address>
           <Offsets>
-            <Offset>31135D+6</Offset>
+            <Offset>4FCBC6</Offset>
           </Offsets>
-          <Hotkeys>
-            <Hotkey>
-              <Action>Set Value</Action>
-              <Keys>
-                <Key>17</Key>
-                <Key>97</Key>
-              </Keys>
-              <Value>1</Value>
-              <Description>Allow emergency</Description>
-              <ID>0</ID>
-            </Hotkey>
-          </Hotkeys>
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
@@ -482,6 +520,49 @@ function THActiveQueue:new(t)
 end
 --/THActiveQueue class
 
+--THDisaster class
+THDisaster = {}
+
+function THDisaster:unactivate(timer)
+  ACTIVE_QUEUE:remove("disaster")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THDisaster:tryRun(timer)
+  typeMem = ADDRESS_LIST.getMemoryRecordByDescription("disaster-type")
+  typeVal = readBytes(typeMem.CurrentAddress, 1)
+
+  if typeVal &gt; 0 then
+    timer.destroy()
+
+    timer = createTimer(getMainForm())
+    timer.Interval = self.unactivateTimeout
+    timer.OnTimer = function(timer)
+      return self:unactivate(timer)
+    end
+  else
+    daysMem = ADDRESS_LIST.getMemoryRecordByDescription("disaster-days")
+    writeSmallInteger(daysMem.CurrentAddress, CONFIG.MAX_2SBYTES)
+  end
+end
+
+function THDisaster:run()
+  timer = createTimer(getMainForm())
+  timer.Interval = 5 * 1000
+  timer.OnTimer = function(timer)
+    return self:tryRun(timer)
+  end
+end
+
+function THDisaster:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THDisaster class
+
 --THEmergency class
 THEmergency = {}
 
@@ -636,6 +717,7 @@ THCommand = {
 }
 
 THCommandsTable = {
+  ["disaster"] = THDisaster,
   ["emergency"] = THEmergency,
   ["quake"] = THQuake,
   ["VIP"] = THVip
