@@ -18,7 +18,6 @@
     <CheatEntry>
       <ID>208</ID>
       <Description>"VIPs"</Description>
-      <LastState Value="" RealAddress="00000000"/>
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
         <CheatEntry>
@@ -90,7 +89,6 @@
     <CheatEntry>
       <ID>315</ID>
       <Description>"Quake"</Description>
-      <LastState Value="" RealAddress="00000000"/>
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
         <CheatEntry>
@@ -164,7 +162,6 @@
     <CheatEntry>
       <ID>316</ID>
       <Description>"Emergency"</Description>
-      <LastState Value="" RealAddress="00000000"/>
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
         <CheatEntry>
@@ -282,7 +279,6 @@
     <CheatEntry>
       <ID>317</ID>
       <Description>"Disaster"</Description>
-      <LastState Value="" RealAddress="00000000"/>
       <GroupHeader>1</GroupHeader>
       <CheatEntries>
         <CheatEntry>
@@ -316,6 +312,36 @@
           </Offsets>
         </CheatEntry>
       </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>319</ID>
+      <Description>"BowelOverflows"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>0x01D3A1A0</Address>
+      <Offsets>
+        <Offset>2E9D98</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>321</ID>
+      <Description>"vomitLimit"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>0x01D3A1A0</Address>
+      <Offsets>
+        <Offset>2E9D9A</Offset>
+      </Offsets>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>323</ID>
+      <Description>"LeaveMax"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>0x01D3A1A0</Address>
+      <Offsets>
+        <Offset>2E9D88</Offset>
+      </Offsets>
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols/>
@@ -353,7 +379,7 @@ end
 
 --Config class
 THConfig = {
-  PATH = "FULL_PATH_TO_FILE/TH_events.config",
+  PATH = "C:/Games/stream/TH/TH_events.config",
   QUEUE_FILE = "TH_events_queue.txt",
   ACTIVE_QUEUE_FILE = "TH_events_active_queue.txt",
   EMERGENCIES_CONFIG = "TH_emergencies.config",
@@ -603,6 +629,82 @@ function THEmergency:new(t)
 end
 --/THEmergency class
 
+--THLeave class
+THLeave = {}
+
+function THLeave:unactivate(timer)
+  ACTIVE_QUEUE:remove("leave")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THLeave:run()
+  valueMem = ADDRESS_LIST.getMemoryRecordByDescription("LeaveMax")
+  valueOrig = readBytes(valueMem.CurrentAddress, 1)
+  writeBytes(valueMem.CurrentAddress, 1)
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+
+  function reset(timer)
+    writeSmallInteger(valueMem.CurrentAddress, valueOrig)
+    timer.Destroy()
+  end
+
+  resetTimer = createTimer(getMainForm())
+  resetTimer.Interval = self.unactivateTimeout
+  resetTimer.OnTimer = reset
+end
+
+function THLeave:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THLeave class
+
+--THPiss class
+THPiss = {}
+
+function THPiss:unactivate(timer)
+  ACTIVE_QUEUE:remove("piss")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THPiss:run(arg)
+  valueMem = ADDRESS_LIST.getMemoryRecordByDescription("BowelOverflows")
+  valueOrig = readBytes(valueMem.CurrentAddress, 1)
+  writeBytes(valueMem.CurrentAddress, arg)
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+
+  function reset(timer)
+    writeSmallInteger(valueMem.CurrentAddress, valueOrig)
+    timer.Destroy()
+  end
+
+  resetTimer = createTimer(getMainForm())
+  resetTimer.Interval = self.unactivateTimeout
+  resetTimer.OnTimer = reset
+end
+
+function THPiss:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THPiss class
+
 --THQuake class
 THQuake = {}
 
@@ -707,6 +809,44 @@ function THVip:new(t)
 end
 --/THVip class
 
+--THVomit class
+THVomit = {}
+
+function THVomit:unactivate(timer)
+  ACTIVE_QUEUE:remove("vomit")
+  ACTIVE_QUEUE:display()
+  timer.destroy()
+end
+
+function THVomit:run(arg)
+  valueMem = ADDRESS_LIST.getMemoryRecordByDescription("vomitLimit")
+  valueOrig = readBytes(valueMem.CurrentAddress, 1)
+  writeBytes(valueMem.CurrentAddress, arg)
+
+  timer = createTimer(getMainForm())
+  timer.Interval = self.unactivateTimeout
+  timer.OnTimer = function(timer)
+    return self:unactivate(timer)
+  end
+
+  function reset(timer)
+    writeSmallInteger(valueMem.CurrentAddress, valueOrig)
+    timer.Destroy()
+  end
+
+  resetTimer = createTimer(getMainForm())
+  resetTimer.Interval = self.unactivateTimeout
+  resetTimer.OnTimer = reset
+end
+
+function THVomit:new(t)
+  t = t or {}
+  setmetatable(t, self)
+  self.__index = self
+  return t
+end
+--/THVomit class
+
 --THCommand class
 THCommand = {
   raw = "",
@@ -719,8 +859,11 @@ THCommand = {
 THCommandsTable = {
   ["disaster"] = THDisaster,
   ["emergency"] = THEmergency,
+  ["leave"] = THLeave,
+  ["piss"] = THPiss,
   ["quake"] = THQuake,
-  ["VIP"] = THVip
+  ["VIP"] = THVip,
+  ["vomit"] = THVomit
 }
 
 function THCommand:parse(line)
