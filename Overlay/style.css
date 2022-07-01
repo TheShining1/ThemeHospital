@@ -1,0 +1,56 @@
+body {
+  font-family: 'Balsamiq Sans';
+  font-size: 16px;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0);
+  margin: 0px auto;
+  overflow: hidden;
+  color: white;
+}
+
+#activeQueue {
+  position: relative;
+  top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#queue {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: flex-end;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.queue-bg {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 5px;
+  display: flex;
+  width: 280px;
+  height: 45px;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 10px 15px 10px 5px;
+}
+
+.icon img {
+  height: 100%;
+}
+
+.item-name {
+  padding: 2px;
+}
+
+.item-by {
+  padding: 2px;
+  font-style: italic;
+}
