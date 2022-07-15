@@ -1,5 +1,7 @@
 # ThemeHospital
 
+Tutorial: https://www.youtube.com/playlist?list=PLbTScFtjz7tlf8ceIg4xDNTIwwdTGyfSw
+
 Cheat Engine table for adding interactivity to Theme Hospital with Twitch's channel points.
 
 Line to add in queue file throught Streamer.Bot:
